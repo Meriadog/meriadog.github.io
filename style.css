@@ -1,0 +1,34 @@
+body{
+    background-image:url('background.jpg') ;
+}
+img{
+    width: 50%;
+    height: 50%;
+}
+
+p.text-example{
+    color: aliceblue;
+    background-color: violet;
+    border-radius: 5px;
+
+}
+
+label{
+    color: aliceblue;
+}
+
+h1{
+    font-size: large;
+    color: aliceblue;
+    border: 4px;
+    border-color: coral;
+    border-style: solid;
+}
+
+figcaption{
+    color: aliceblue;
+}
+
+img{
+    border-radius: 5%;
+}
