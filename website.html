@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Sports Jersey Collection</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <style>
+    body {
+      font-family: 'Anton', sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    
+    .home {
+      position: relative;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+
+    .background-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+    }
+
+    .background-container img {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0;
+      transition: opacity 1s ease-in-out;
+    }
+
+    .background-container img.active {
+      opacity: 1;
+    }
+
+    .floating-image {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 300px;
+      height: 300px;
+      transform: translate(-50%, -50%);
+      z-index: 2;
+    }
+
+    .floating-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      position: absolute;
+      opacity: 0;
+      transition: opacity 1s ease-in-out;
+    }
+
+    .floating-image img.active {
+      opacity: 1;
+    }
+
+    .home-button {
+      position: absolute;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 3;
+    }
+
+    .home-button a {
+      background-color: #FFCB05;
+      color: #00274D;
+      padding: 15px 30px;
+      font-size: 25px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .home-button a:hover {
+      background-color: #e5b800;
+    }
+
+    .navbar {
+      margin-bottom: 50px;
+      border-radius: 0;
+    }
+
+    .navbar-inverse {
+      background-color: #00274D;
+      border-color: #001F3F;
+    }
+
+    .navbar-inverse .navbar-brand,
+    .navbar-inverse .navbar-nav > li > a {
+      color: #ffffff;
+      font-weight: bold;
+      text-transform: uppercase;
+      font-family: 'Arial Black', sans-serif;
+      letter-spacing: 1px;
+    }
+
+    .navbar-inverse .navbar-brand:hover,
+    .navbar-inverse .navbar-nav > li > a:hover {
+      color: #FFCB05;
+    }
+
+    .navbar-inverse .navbar-nav > .active > a {
+      background-color: #FFCB05;
+      color: #00274D !important;
+    }
+
+    .navbar-inverse i {
+      margin-right: 6px;
+    }
+
+    .navbar-inverse .navbar-nav > li > a:hover {
+      transition: all 0.3s ease-in-out;
+      transform: scale(1.05);
+    }
+
+    .tab-pane {
+  display: none;
+  }
+
+    .tab-pane.active {
+     display: block;
+    }
+
+    .tab-link.active {
+    font-weight: bold; 
+    }
+
+    .panel {
+      background-color: rgba(255, 255, 255, 0.9);
+      color: #000;
+      border-radius: 5px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    }
+
+    .panel-heading {
+      font-size: 18px;
+      font-weight: bold;
+      text-align: center;
+      background-color: #004080 !important;
+      color: white !important;
+    }
+
+    .panel-body {
+      background-color: #f8f8f8;
+      padding: 10px;
+      border-top: 3px solid #0072CE;
+    }
+
+    .image-fade {
+      position: relative;
+      width: 100%;
+      height: auto;
+    }
+
+    .image-fade img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      opacity: 0;
+      transition: opacity 1s ease-in-out;
+    }
+
+    .image-fade img.active {
+      opacity: 1;
+      position: relative;
+    }
+
+    footer {
+    background-color:transparent;
+    padding: 25px;
+    z-index: 1000;
+    position: relative;
+    text-align: center;
+    color: #ffffff; 
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.8); 
+  }
+
+  
+
+    html, body {
+  height: 100%;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+}
+
+.page-wrapper {
+  flex: 1;
+}
+  </style>
+
+<script>
+  $(document).ready(function () {
+    $('.image-fade').each(function () {
+      const $container = $(this);
+      const $imgs = $container.find('img');
+      let index = 0;
+
+      setInterval(() => {
+        $imgs.eq(index).removeClass('active');
+        index = (index + 1) % $imgs.length;
+        $imgs.eq(index).addClass('active');
+      }, 5000); 
+    });
+
+    $('.tab-link').on('click', function (e) {
+      e.preventDefault();
+      const tab = $(this).data('tab');
+
+      $('.tab-pane').removeClass('active');
+      $('.tab-link').removeClass('active');
+
+      $('#' + tab).addClass('active');
+      $(this).addClass('active');
+    });
+
+    $('.tab-pane').removeClass('active'); 
+    $('#home').addClass('active');
+    $('.tab-link[data-tab="home"]').addClass('active'); 
+
+
+    const bgImages = document.querySelectorAll('.background-container img');
+    let bgIndex = 0;
+    if (bgImages.length > 0) {
+      setInterval(() => {
+        bgImages[bgIndex].classList.remove('active');
+        bgIndex = (bgIndex + 1) % bgImages.length;
+        bgImages[bgIndex].classList.add('active');
+      }, 10000);
+    }
+
+
+    const floatImages = document.querySelectorAll('.floating-image img');
+    let floatIndex = 0;
+    if (floatImages.length > 0) {
+      setInterval(() => {
+        floatImages[floatIndex].classList.remove('active');
+        floatIndex = (floatIndex + 1) % floatImages.length;
+        floatImages[floatIndex].classList.add('active');
+      }, 4000); 
+    }
+  });
+</script>
+</head>
+
+<body>
+<div class="page-wrapper"></div>
+
+<div id="main-content" style="margin-top: 70px;">
+  <nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+          <span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
+        </button>
+      </div>
+      <div class="collapse navbar-collapse" id="myNavbar">
+        <ul class="nav navbar-nav">
+          <li><a href="#" class="tab-link" data-tab="home"><i class="fa-solid fa-shirt"></i> Home</a></li>
+          <li><a href="#" class="tab-link" data-tab="nhl"><i class="fa-solid fa-hockey-puck"></i> NHL Jerseys</a></li>
+          <li><a href="#" class="tab-link" data-tab="liiga"><i class="fa-solid fa-hockey-puck"></i> Liiga Jerseys</a></li>
+          <li><a href="#" class="tab-link" data-tab="premier"><i class="fa-solid fa-futbol"></i> Premier League Kits</a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="https://www.matchwornshirt.com/" target="_blank"> <i class="fa-solid fa-cart-shopping"></i> Where to buy</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+</div>
+  
+
+<div id="home" class="tab-pane">
+  <div class="container">
+    <section id="home-section">
+      <h2>Stadium Gallery</h2>
+      <div class="background-container">
+        <img src="nhlstadium.jpg" class="active" alt="Stadium 1">
+        <img src="footballstadium1.jpg" alt="Stadium 2">
+        <img src="footballstadium2.jpg" alt="Stadium 3">
+      </div>
+    </section>
+  </div>  
+  <div class="floating-image">
+    <img src="clarke1.jpg" class="active" alt="Overlay 1">
+    <img src="pakarinen1.jpg" alt="Overlay 2">
+    <img src="heiskanen1.jpg" alt="Overlay 3">
+    <img src="hifkpakarinen1.jpg" alt="Overlay 4">
+    <img src="özil1.jpg" alt="Overlay 5">
+  </div>
+</div>
+
+
+  <div id="tab-content" style="margin-top: 70px;">
+    <div id="nhl" class="tab-pane">
+      <div class="container">
+        <h2>NHL Jerseys</h2>
+        <p>The National Hockey League is a professional ice hockey league in North America.</p>
+        <div class="row">
+          <div class="col-sm-4">
+            <div class="panel panel-primary">
+              <div class="panel-heading">Dale Clarke</div>
+              <div class="panel-body"><img src="clarke1.JPEG" class="img-responsive" alt="Dale Clarke"></div>
+              <div class="panel-footer">St. Louis Blues</div>
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <div class="panel panel-primary">
+              <div class="panel-heading">Kari Lehtonen</div>
+              <div class="panel-body"><img src="lehtonen1.jpg" class="img-responsive" alt="Kari Lehtonen"></div>
+              <div class="panel-footer">Atlanta Trashers</div>
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <div class="panel panel-primary">
+              <div class="panel-heading">Tuomo Ruutu</div>
+              <div class="panel-body"><img src="ruutu1.jpg" class="img-responsive" alt="Tuomo Ruutu"></div>
+              <div class="panel-footer">Caroline Hurricanes</div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-4">
+            <div class="panel panel-primary">
+              <div class="panel-heading">Niklas Hagman</div>
+              <div class="panel-body">
+                <div class="image-fade">
+                  <img src="hagman1.jpg" class="img-responsive active" alt="Image 1">
+                  <img src="hagman2.jpg" class="img-responsive" alt="Image 2">
+                </div>
+              </div>
+              <div class="panel-footer">Florida Panthers</div>
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <div class="panel panel-success">
+              <div class="panel-heading">Iiro Pakarinen</div>
+              <div class="panel-body">
+                <div class="image-fade">
+                  <img src="pakarinen1.jpg" class="img-responsive active" alt="Image 1">
+                  <img src="pakarinen2.jpg" class="img-responsive" alt="Image 2">
+                </div>
+              </div>
+              <div class="panel-footer">Edmonton Oilers</div>
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <div class="panel panel-primary">
+              <div class="panel-heading">Miro Heiskanen</div>
+              <div class="panel-body">
+                <div class="image-fade">
+                  <img src="heiskanen1.JPEG" class="img-responsive active" alt="Image 1">
+                  <img src="heiskanen2.JPEG" class="img-responsive" alt="Image 2">
+                </div>
+              </div>
+              <div class="panel-footer">Dallas Stars</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+    
+    <div id="liiga" class="tab-pane">
+      <div class="container">
+        <h2>Liiga Jerseys</h2>
+        <p>The Liiga is the top professional ice hockey league in Finland.</p>
+        <div class="row">
+          <div class="col-sm-4">
+            <div class="panel panel-danger">
+              <div class="panel-heading">Antti Philström</div>
+              <div class="panel-body">
+                <div class="image-fade">
+                  <img src="philström1.jpg" class="img-responsive active" alt="Image 1">
+                  <img src="philström2.jpg" class="img-responsive" alt="Image 2">
+                </div>
+              </div>
+              <div class="panel-footer">HIFK SM-Liiga</div>
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <div class="panel panel-danger">
+              <div class="panel-heading">Lennart Petrell</div>
+              <div class="panel-body">
+                <div class="image-fade">
+                  <img src="petrell1.jpg" class="img-responsive active" alt="Image 1">
+                  <img src="petrell2.jpg" class="img-responsive" alt="Image 2">
+                </div>
+              </div>
+              <div class="panel-footer">HIFK SM-Liiga</div>
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <div class="panel panel-danger">
+              <div class="panel-heading">Iiro Pakarinen</div>
+              <div class="panel-body">
+                <div class="image-fade">
+                  <img src="hifkpakarinen1.jpg" class="img-responsive active" alt="Image 1">
+                  <img src="hifkpakarinen2.jpg" class="img-responsive" alt="Image 2">
+                </div>
+              </div>
+              <div class="panel-footer">HIFK SM-Liiga</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="premier" class="tab-pane">
+      <div class="container">
+        <h2>Premier League Kits</h2>
+        <p>The Premier League is the top professional football league in England.</p>
+        <div class="row">
+          <div class="col-sm-4">
+            <div class="panel panel-primary">
+              <div class="panel-heading">Mesut Özil</div>
+              <div class="panel-body">
+                <div class="image-fade">
+                  <img src="özil1.jpg" class="img-responsive active" alt="Image 1">
+                  <img src="özil2.jpg" class="img-responsive" alt="Image 2">
+                </div>
+              </div>
+              <div class="panel-footer">Arsenal</div>
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <div class="panel panel-danger">
+              <div class="panel-heading">William Saliba</div>
+              <div class="panel-body">
+                <div class="image-fade">
+                  <img src="saliba1.jpg" class="img-responsive active" alt="Image 1">
+                  <img src="saliba2.jpg" class="img-responsive" alt="Image 2">
+                </div>
+              </div>
+              <div class="panel-footer">Arsenal</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+  <footer class="container-fluid text-center">
+    <p>&copy; 2025 Sports Jersey Collection</p>
+    <p>
+      <a href="https://www.facebook.com/IFKHelsinki/" target="_blank"><i class="fab fa-facebook-f"></i></a>&nbsp;
+      <a href="https://www.instagram.com/ifk_helsinki/?hl=en" target="_blank"><i class="fab fa-instagram"></i></a>
+    </p>
+  </footer>
+
+</body>
+</html>
